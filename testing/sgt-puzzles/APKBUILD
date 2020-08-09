@@ -1,0 +1,42 @@
+# Contributor:
+# Maintainer:
+pkgname=sgt-puzzles
+pkgver=2020.06.03.01
+_shorthash=9aa7b7c
+_longhash=9aa7b7cdfb2bcd200f45941a58d6ae698882a2d4
+pkgrel=0
+pkgdesc="Simon Tatham's puzzles collection"
+url="https://www.chiark.greenend.org.uk/~sgtatham/puzzles/"
+arch="all"
+license="MIT"
+depends=""
+makedepends="perl autoconf automake gtk+-dev"
+install=""
+subpackages=""
+source="$pkgname-$pkgver.tar.gz::https://git.tartarus.org/?p=simon/puzzles.git;a=snapshot;h=$_longhash;sf=tgz"
+builddir="$srcdir/puzzles-$_shorthash"
+
+build() {
+  ./mkfiles.pl
+  ./mkauto.sh
+  ./configure \
+    --with-gtk=2 \
+    --program-prefix=sgt- \
+    --build=$CBUILD \
+    --host=$CHOST \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --mandir=/usr/share/man \
+    --localstatedir=/var
+  make
+}
+
+check() {
+  make check
+}
+
+package() {
+  make DESTDIR="$pkgdir" install
+}
+
+sha512sums="e18f0c51ac8770b40f03980dccbbdab1cf9943525ff226b1d752c6545dba45c1d13f5a79b3919799bfc76a44b4d6468d2fb6eedfc28498178dc5777adca703f6  sgt-puzzles-2020.06.03.01.tar.gz"
